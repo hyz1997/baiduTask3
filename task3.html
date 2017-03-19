@@ -38,53 +38,54 @@ window.onload = function() {
     var source = document.getElementById('source');
     var source_li = source.getElementsByTagName('li');
     var resort = document.getElementById('resort');
-    //var bn=document.getElementById("sort-btn");
     var bn = document.getElementsByTagName('button')[0];
-    var arr = new Array();
-    var strArr = new Array();
-    var numArr = new Array();
-    var Arr = new Array();
-    var data = new Array(strArr,numArr);
-    var str = '';
-    var str1;
-    var str2;
+    //定义data数组，定义的位置很重要
+    var data = [];
+    //str一定要等于空字符串，不然的话第一个数据就会是undfined
+    var str='';
     var n=0;
-    for (var i = 0; i < source_li.length; i++) {
-        arr = source_li[i].innerHTML;
-        str1 = arr[0]+arr[1];
-        str2 = parseInt(arr[10]+arr[11]);
-        strArr.push(str1);
-        numArr.push(str2);
-      };
-
-    function sortNumber(a,b)
-    {
-    return a - b;
-    }
     function getData() {
-      for (var j = 0; j < source_li.length; j++) {
-        if(numArr[j]>60){
-      
-          var sort = numArr.sort(sortNumber);
-          n++;
-      //对新数组用sort()方法进行排序
-          str += '<li>第'+n+'名：'+strArr[j]+'-'+numArr[j]+'</li>';    
-      //将结果添加到html中
-          resort.innerHTML= str;
-        }
-      };
-      document.getElementById("sort-btn").innerHTML = "收起";
-      console.log(str);
+        for (var i = 0; i < source_li.length; i++) {
+            var arr = source_li[i].innerHTML;
+            var Arr = [];//如果是在for循环外定义的这个数组，那生成的将会是一个一维数组，非二维
+            Arr.push(arr.slice(0,2));//数组的slice方法，复制数组的0到2位
+            Arr.push(arr.slice(10,12));
+            data.push(Arr);//这个返回的不直接是一个直观的Data二维数组，但他其实是对的。我在这里因为没有直观的看到data数组而踩了很多坑
+        };
+
+        return data;
 
     }
-    function reTurn () {
-      resort.innerHTML = '';
-    }    
-    bn.addEventListener('click',getData,true);
-    //bn.addEventListener('click',reTurn,true);
+    function sortAqiData(data) {
+        data.sort(function(a,b){
+          return a[1] - b[1];//因为data数组的第2位才是数字，所以要选到第二位再进行比较
+        });
+        return data;
+    }
+
+    function render(data) {
+      for (var i = 0; i < source_li.length; i++) {
+          n++;
+          str += '<li>第'+n+'名：'+data[i][0]+'-'+data[i][1]+'</li>';
+          resort.innerHTML= str;
+      }
+    }
+    function btnHandle() {
+      var aqiData = getData();
+      aqiData = sortAqiData(aqiData);
+      render(aqiData);
+    }
+    function init() {
+
+      bn.onclick = function(){
+        btnHandle();
+        bn.disabled="disabled";
+      }
+      // 在这下面给sort-btn绑定一个点击事件，点击时触发btnHandle函数
+
+    }
+    init();
 }
-
-
 </script>
 </body>
 </html>
