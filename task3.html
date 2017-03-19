@@ -1,0 +1,90 @@
+<!DOCTYPE>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>IFE JavaScript Task 01</title>
+  </head>
+<body>
+
+  <ul id="source">
+    <li>北京空气质量：<b>90</b></li>
+    <li>上海空气质量：<b>70</b></li>
+    <li>天津空气质量：<b>80</b></li>
+    <li>广州空气质量：<b>50</b></li>
+    <li>深圳空气质量：<b>40</b></li>
+    <li>福州空气质量：<b>32</b></li>
+    <li>成都空气质量：<b>90</b></li>
+  </ul>
+
+  <ul id="resort">
+    <!-- 
+    <li>第一名：北京空气质量：<b>90</b></li>
+    <li>第二名：北京空气质量：<b>90</b></li>
+    <li>第三名：北京空气质量：<b>90</b></li>
+     -->
+
+  </ul>
+
+  <button id="sort-btn">排序</button>
+
+<script type="text/javascript">
+
+/**
+ * getData方法
+ * 读取id为source的列表，获取其中城市名字及城市对应的空气质量
+ * 返回一个数组，格式见函数中示例
+ */
+window.onload = function() {
+    var source = document.getElementById('source');
+    var source_li = source.getElementsByTagName('li');
+    var resort = document.getElementById('resort');
+    //var bn=document.getElementById("sort-btn");
+    var bn = document.getElementsByTagName('button')[0];
+    var arr = new Array();
+    var strArr = new Array();
+    var numArr = new Array();
+    var Arr = new Array();
+    var data = new Array(strArr,numArr);
+    var str = '';
+    var str1;
+    var str2;
+    var n=0;
+    for (var i = 0; i < source_li.length; i++) {
+        arr = source_li[i].innerHTML;
+        str1 = arr[0]+arr[1];
+        str2 = parseInt(arr[10]+arr[11]);
+        strArr.push(str1);
+        numArr.push(str2);
+      };
+
+    function sortNumber(a,b)
+    {
+    return a - b;
+    }
+    function getData() {
+      for (var j = 0; j < source_li.length; j++) {
+        if(numArr[j]>60){
+      
+          var sort = numArr.sort(sortNumber);
+          n++;
+      //对新数组用sort()方法进行排序
+          str += '<li>第'+n+'名：'+strArr[j]+'-'+numArr[j]+'</li>';    
+      //将结果添加到html中
+          resort.innerHTML= str;
+        }
+      };
+      document.getElementById("sort-btn").innerHTML = "收起";
+      console.log(str);
+
+    }
+    function reTurn () {
+      resort.innerHTML = '';
+    }    
+    bn.addEventListener('click',getData,true);
+    //bn.addEventListener('click',reTurn,true);
+}
+
+
+</script>
+</body>
+</html>
